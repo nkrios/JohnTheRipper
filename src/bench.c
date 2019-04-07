@@ -779,10 +779,9 @@ AGAIN:
 		}
 
 		if (john_main_process) {
-			if (options.flags & FLG_NOTESTS)
-				printf("SKIP ");
-			else
-				printf("PASS ");
+			printf("%s%s",
+			       (options.flags & FLG_NOTESTS) ? "SKIP" : "PASS",
+			       benchmark_time ? "" : "\n");
 			fflush(stdout);
 		}
 
@@ -840,12 +839,8 @@ AGAIN:
 			goto next;
 		}
 
-		if (john_main_process) {
-			if (benchmark_time)
-				puts("\b\b\b\b\bDONE");
-			else
-				puts("");
-		}
+		if (john_main_process && benchmark_time)
+			puts(", DONE");
 #ifdef _OPENMP
 		// reset this in case format capped it (we may be testing more formats)
 		omp_set_num_threads(ompt_start);
